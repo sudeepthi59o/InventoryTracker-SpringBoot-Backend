@@ -3,6 +3,8 @@ package com.sr.inventory_tracker.controller;
 import com.sr.inventory_tracker.error.UsernameExistsException;
 import com.sr.inventory_tracker.model.UserDTO;
 import com.sr.inventory_tracker.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -20,20 +22,20 @@ public class LoginController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Register a new user")
+    @ApiResponse(responseCode = "200", description = "User registered successfully")
     @PostMapping("/register")
     public String register(@Valid @RequestBody UserDTO userDTO) throws UsernameExistsException {
         log.info("Inside register method in controller");
         return userService.register(userDTO);
     }
 
+    @Operation(summary = "Login a user")
+    @ApiResponse(responseCode = "200", description = "User authenticated successfully and token returned")
+    @ApiResponse(responseCode = "400", description = "Invalid credentials")
     @PostMapping("/login")
     public String login(@Valid @RequestBody UserDTO userDTO) {
         log.info("Inside login method in controller");
         return userService.verify(userDTO);
-    }
-
-    @GetMapping("/csrf")
-    public CsrfToken getCsrf(HttpServletRequest request) {
-        return (CsrfToken) request.getAttribute("_csrf");
     }
 }

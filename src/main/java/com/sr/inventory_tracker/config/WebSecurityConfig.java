@@ -30,9 +30,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf(csrf -> csrf.disable())
+                .csrf((csrf -> csrf.disable()))
                 .authorizeHttpRequests(request -> request.requestMatchers("/user/login").permitAll()
                         .requestMatchers(HttpMethod.GET,"/product/**","/product").hasAuthority("ROLE_USER")
+                        .requestMatchers(HttpMethod.GET,"/swagger-ui.html").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                         .requestMatchers("/user/register").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST,"/product").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/product/**").hasAuthority("ROLE_ADMIN")
