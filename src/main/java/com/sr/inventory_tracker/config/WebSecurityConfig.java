@@ -32,7 +32,11 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request.requestMatchers("/user/login").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/product/**","/product").hasAuthority("ROLE_USER")
                         .requestMatchers("/user/register").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/product").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/product/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/product/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());
