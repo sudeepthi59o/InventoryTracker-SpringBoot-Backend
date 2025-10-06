@@ -5,6 +5,9 @@ import com.sr.inventory_tracker.model.User;
 import com.sr.inventory_tracker.model.UserDTO;
 import com.sr.inventory_tracker.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     public String verify(UserDTO userDTO) {
@@ -25,9 +30,11 @@ public class UserService {
 
         User user = fromDTOToEntity(userDTO);
 
-        if (userRepository.existsByUserName(userDTO.getUserName())) {
-            return "success";
-        }
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
+            if(authentication.isAuthenticated()) {
+                return "success";
+            }
+
 
         return "failure";
     }

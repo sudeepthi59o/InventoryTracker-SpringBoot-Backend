@@ -1,12 +1,10 @@
 package com.sr.inventory_tracker.controller;
 
 import com.sr.inventory_tracker.error.UsernameExistsException;
-import com.sr.inventory_tracker.model.User;
 import com.sr.inventory_tracker.model.UserDTO;
 import com.sr.inventory_tracker.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
