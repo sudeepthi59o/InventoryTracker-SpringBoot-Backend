@@ -34,11 +34,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
 
-        log.debug("Authorization Header: {}", authHeader);
+        log.info("Authorization Header: {}", authHeader);
 
         if( authHeader == null || !authHeader.startsWith("Bearer "))
         {
-            log.debug("Authorization header is missing or not a Bearer token.");
+            log.info("Authorization header is missing or not a Bearer token.");
             filterChain.doFilter(request,response);
             return;
         }
@@ -46,22 +46,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String token = authHeader.substring(7);
         String username = jwtService.extractUsername(token);
 
-        log.debug("Extracted JWT: {}", token);
-        log.debug("Extracted username: {}", username);
+        log.info("Extracted JWT: {}", token);
+        log.info("Extracted username: {}", username);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        log.debug("Current Authentication: {}", authentication);
+        log.info("Current Authentication: {}", authentication);
 
         if (authentication == null && username!=null)
         {
-            log.debug("No valid authentication found. Attempting to authenticate the user.");
+            log.info("No valid authentication found. Attempting to authenticate the user.");
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
             if(jwtService.isValidToken(token, userDetails)) {
 
-                log.debug("Validated JWT token");
+                log.info("Validated JWT token");
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
@@ -70,7 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
-                log.debug("Authentication token set in the security context for user: {}", username);
+                log.info("Authentication token set in the security context for user: {}", username);
 
             }
 

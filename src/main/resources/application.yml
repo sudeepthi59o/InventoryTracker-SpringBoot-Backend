@@ -13,3 +13,8 @@ spring:
 
 server:
   port: 9000
+
+logging:
+  level:
+    com.sr.inventory-tracker: DEBUG
+

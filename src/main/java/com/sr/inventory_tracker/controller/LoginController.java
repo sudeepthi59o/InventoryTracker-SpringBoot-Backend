@@ -5,11 +5,13 @@ import com.sr.inventory_tracker.model.UserDTO;
 import com.sr.inventory_tracker.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class LoginController {
 
     private final UserService userService;
@@ -20,11 +22,13 @@ public class LoginController {
 
     @PostMapping("/register")
     public String register(@Valid @RequestBody UserDTO userDTO) throws UsernameExistsException {
+        log.info("Inside register method in controller");
         return userService.register(userDTO);
     }
 
     @PostMapping("/login")
     public String login(@Valid @RequestBody UserDTO userDTO) {
+        log.info("Inside login method in controller");
         return userService.verify(userDTO);
     }
 
