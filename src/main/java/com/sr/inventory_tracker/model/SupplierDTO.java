@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SupplierDTO {
 
+    private Long id;
     private String name;
 }
