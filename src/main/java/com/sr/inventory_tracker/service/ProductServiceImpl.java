@@ -8,7 +8,6 @@ import com.sr.inventory_tracker.repository.CategoryRepository;
 import com.sr.inventory_tracker.repository.ProductRepository;
 import com.sr.inventory_tracker.repository.SupplierRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
