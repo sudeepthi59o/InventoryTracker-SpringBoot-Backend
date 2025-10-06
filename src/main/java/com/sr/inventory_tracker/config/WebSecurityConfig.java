@@ -1,7 +1,6 @@
 package com.sr.inventory_tracker.config;
 
 import com.sr.inventory_tracker.service.CustomUserDetailsService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -25,9 +24,9 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf(Customizer.withDefaults())
-                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/user/register","/user/login"))
+                .authorizeHttpRequests(request -> request.requestMatchers("/user/register","/user/login").permitAll()
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
 
         return httpSecurity.build();
@@ -35,7 +34,7 @@ public class WebSecurityConfig {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        new BCryptPasswordEncoder(7);
+        return new BCryptPasswordEncoder(14);
     }
 
     @Bean

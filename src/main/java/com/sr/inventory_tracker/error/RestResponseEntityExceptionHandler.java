@@ -3,10 +3,14 @@ package com.sr.inventory_tracker.error;
 import com.sr.inventory_tracker.model.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 @ResponseStatus
@@ -32,5 +36,10 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
+    @ExceptionHandler(UsernameExistsException.class)
+    public ResponseEntity<ErrorMessage> usernameExistsException(UsernameExistsException usernameExistsException) {
+        ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST, usernameExistsException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+    }
 
 }

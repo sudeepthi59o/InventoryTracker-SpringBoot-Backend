@@ -1,12 +1,14 @@
 package com.sr.inventory_tracker.controller;
 
+import com.sr.inventory_tracker.error.UsernameExistsException;
 import com.sr.inventory_tracker.model.User;
+import com.sr.inventory_tracker.model.UserDTO;
 import com.sr.inventory_tracker.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -14,18 +16,22 @@ public class LoginController {
 
     private final UserService userService;
 
-
-    public LoginController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public LoginController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        return userService.register(user);
+    public String register(@Valid @RequestBody UserDTO userDTO) throws UsernameExistsException {
+        return userService.register(userDTO);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        return userService.verify(user);
+    public String login(@Valid @RequestBody UserDTO userDTO) {
+        return userService.verify(userDTO);
+    }
+
+    @GetMapping("/csrf")
+    public CsrfToken getCsrf(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute("_csrf");
     }
 }
