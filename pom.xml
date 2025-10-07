@@ -150,7 +150,7 @@
                     <configLocation>google_checks.xml</configLocation> <!-- Or sun_checks.xml or your custom -->
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
-                    <violationSeverity>warning</violationSeverity>
+                    <violationSeverity>error</violationSeverity>
                 </configuration>
                 <executions>
                     <execution>
