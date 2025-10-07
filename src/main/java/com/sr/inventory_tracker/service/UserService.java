@@ -32,10 +32,10 @@ public class UserService {
 
         User user = fromDTOToEntity(userDTO);
 
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
-            if(authentication.isAuthenticated()) {
-                return jwtService.generateToken(user);
-            }
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(user);
+        }
 
 
         return "failure";
@@ -59,7 +59,7 @@ public class UserService {
     }
 
     public User fromDTOToEntity(UserDTO userDTO) {
-         return User.builder()
+        return User.builder()
                 .userName(userDTO.getUserName())
                 .password(userDTO.getPassword())
                 .role(userDTO.getRole())

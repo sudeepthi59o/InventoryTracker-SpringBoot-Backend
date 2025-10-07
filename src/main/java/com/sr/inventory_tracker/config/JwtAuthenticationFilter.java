@@ -36,10 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.info("Authorization Header: {}", authHeader);
 
-        if( authHeader == null || !authHeader.startsWith("Bearer "))
-        {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             log.info("Authorization header is missing or not a Bearer token.");
-            filterChain.doFilter(request,response);
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -53,13 +52,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.info("Current Authentication: {}", authentication);
 
-        if (authentication == null && username!=null)
-        {
+        if (authentication == null && username != null) {
             log.info("No valid authentication found. Attempting to authenticate the user.");
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
-            if(jwtService.isValidToken(token, userDetails)) {
+            if (jwtService.isValidToken(token, userDetails)) {
 
                 log.info("Validated JWT token");
 

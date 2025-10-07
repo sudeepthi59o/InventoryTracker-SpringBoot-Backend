@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
@@ -28,13 +28,12 @@ public class CategoryServiceImpl implements CategoryService{
 
         Optional<Category> category = categoryRepository.findById(id);
 
-        if(category.isEmpty())
-        {
+        if (category.isEmpty()) {
             log.error("Category with ID {} not found", id);
             throw new CategoryNotFoundException("Category with ID " + id + " not found");
 
         }
-         return CategoryDTO
+        return CategoryDTO
                 .builder()
                 .id(category.get().getId())
                 .name(category.get().getName())
@@ -58,13 +57,13 @@ public class CategoryServiceImpl implements CategoryService{
 
         List<CategoryDTO> categoryDTOs = new ArrayList<>();
 
-        for(Category category:categories) {
-                categoryDTOs.add(CategoryDTO
-                        .builder()
-                        .id(category.getId())
-                        .name(category.getName())
-                        .build());
-            }
+        for (Category category : categories) {
+            categoryDTOs.add(CategoryDTO
+                    .builder()
+                    .id(category.getId())
+                    .name(category.getName())
+                    .build());
+        }
 
         return categoryDTOs;
     }

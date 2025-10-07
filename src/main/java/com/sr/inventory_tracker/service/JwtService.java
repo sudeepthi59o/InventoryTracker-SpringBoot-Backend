@@ -22,10 +22,10 @@ public class JwtService {
     private String secretKey = null;
 
     public String generateToken(User user) {
-        log.info("Inside generateToken for user {}",user.getUserName());
-        Map<String,Object> claims = new HashMap<>();
+        log.info("Inside generateToken for user {}", user.getUserName());
+        Map<String, Object> claims = new HashMap<>();
 
-        claims.put("roles", "ROLE_"+user.getRole());
+        claims.put("roles", "ROLE_" + user.getRole());
 
         return Jwts.builder()
                 .claims()
@@ -33,7 +33,7 @@ public class JwtService {
                 .subject(user.getUserName())
                 .issuer("Inventory Tracker Application")
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+ 10*60*1000))
+                .expiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                 .and()
                 .signWith(generateKey())
                 .compact();
@@ -50,13 +50,13 @@ public class JwtService {
     }
 
     public String extractUsername(String token) {
-        log.info("Inside extractUsername for token {}",token);
+        log.info("Inside extractUsername for token {}", token);
         return extractClaims(token, Claims::getSubject);
     }
 
-    private <T> T extractClaims(String token, Function<Claims,T> claimsResolver) {
+    private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         Claims claims = extractClaim(token);
-        log.info("Extracted claims: {}",claims);
+        log.info("Extracted claims: {}", claims);
         return claimsResolver.apply(claims);
 
     }
@@ -70,7 +70,7 @@ public class JwtService {
     }
 
     public boolean isValidToken(String token, UserDetails userDetails) {
-        log.info("Check if token is valid: {}",token);
+        log.info("Check if token is valid: {}", token);
         String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
