@@ -9,4 +9,5 @@ public interface CategoryService {
     CategoryDTO getCategory(Long id) throws CategoryNotFoundException;
 
     List<CategoryDTO> getAllCategories();
+
 }

@@ -48,25 +48,16 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) throws SupplierNotFoundException, CategoryNotFoundException {
 
-        Optional<Supplier> supplierOpt = supplierRepository.findById(productDTO.getSupplierDTO().getId());
-        if (supplierOpt.isEmpty()) {
-            log.error("Supplier with ID {} not found", productDTO.getSupplierDTO().getId());
-            throw new SupplierNotFoundException("Supplier not found");
-        }
-
-        Optional<Category> categoryOpt = categoryRepository.findById(productDTO.getCategoryDTO().getId());
-        if (categoryOpt.isEmpty()) {
-            log.error("Category with ID {} not found", productDTO.getCategoryDTO().getId());
-            throw new CategoryNotFoundException("Category not found");
-        }
+        Supplier supplier = getSupplierOrThrow(productDTO.getSupplierDTO().getId());
+        Category category = getCategoryOrThrow(productDTO.getCategoryDTO().getId());
 
         Product product = new Product();
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
         product.setQuantity(productDTO.getQuantity());
 
-        product.setSupplier(supplierOpt.get());
-        product.setCategory(categoryOpt.get());
+        product.setSupplier(supplier);
+        product.setCategory(category);
 
         product = productRepository.save(product);
 

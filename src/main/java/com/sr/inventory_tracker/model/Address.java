@@ -5,6 +5,7 @@ import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @AttributeOverrides({
         @AttributeOverride(name = "address_line1", column = @Column(name = "addressLine1")),
         @AttributeOverride(name = "address_line2", column = @Column(name = "addressLine2")),
