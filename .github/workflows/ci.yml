@@ -39,14 +39,11 @@ jobs:
           distribution: zulu
           java-version: 17
 
-      - name: Build Project (No Tests)
-        run: mvn clean verify -DskipTests=true
-
       - name: Run Checkstyle
         run: mvn checkstyle:check
 
-      - name: Run Tests with Coverage
-        run: mvn test jacoco:report
+      - name: Build, Test and Generate Coverage
+        run: mvn clean verify jacoco:report
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
@@ -59,6 +56,3 @@ jobs:
         with:
           name: test-reports
           path: target/surefire-reports
-
-
-
