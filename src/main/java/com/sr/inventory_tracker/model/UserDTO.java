@@ -24,6 +24,6 @@ public class UserDTO {
     private String password;
 
     @NotNull(message = "Role is required")
-    @Size(min = 3, max = 20, message = "Role must be between 3 and 20 characters")
+    @Size(min = 3, max = 6, message = "Role must be between 3 and 6 characters")
     private String role;
 }

@@ -2,11 +2,13 @@ server:
   port: 9000
 
 spring:
-  profile:
+  profiles:
     active: dev
 ---
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
   application:
     name: inventory-tracker
   datasource:
@@ -22,7 +24,9 @@ spring:
 ---
 
 spring:
-  profiles: test
+  config:
+    activate:
+      on-profile: test
   application:
     name: inventory-tracker
   datasource:

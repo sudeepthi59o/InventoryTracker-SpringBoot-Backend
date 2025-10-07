@@ -32,7 +32,7 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf((csrf -> csrf.disable()))
                 .authorizeHttpRequests(request -> request.requestMatchers("/user/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/product/**", "/product").hasAuthority("ROLE_USER")
+                        .requestMatchers(HttpMethod.GET, "/product/**", "/product").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/swagger-ui.html").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers("/user/register").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/product").hasAuthority("ROLE_ADMIN")

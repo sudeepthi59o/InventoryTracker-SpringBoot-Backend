@@ -1,6 +1,7 @@
 package com.sr.inventory_tracker.service;
 
 import com.sr.inventory_tracker.error.UsernameExistsException;
+import com.sr.inventory_tracker.model.TokenDTO;
 import com.sr.inventory_tracker.model.User;
 import com.sr.inventory_tracker.model.UserDTO;
 import com.sr.inventory_tracker.repository.UserRepository;
@@ -27,18 +28,19 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
-    public String verify(UserDTO userDTO) {
+    public TokenDTO verify(UserDTO userDTO) {
         log.info("Inside login method");
 
         User user = fromDTOToEntity(userDTO);
 
+        user.setRole(userRepository.findRoleByUserName(userDTO.getUserName()));
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(user);
+            return new TokenDTO(jwtService.generateToken(user), user.getRole(), "Authentication successful");
         }
 
-
-        return "failure";
+        return new TokenDTO(null,null,"Authentication Failed");
     }
 
     public String register(UserDTO userDTO) throws UsernameExistsException {
