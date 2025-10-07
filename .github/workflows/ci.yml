@@ -1,0 +1,64 @@
+name: Continuous Integration Workflow for Inventory Tracker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: "test"
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: zulu
+          java-version: 17
+
+      - name: Build Project (No Tests)
+        run: mvn clean verify -DskipTests=true
+
+      - name: Run Checkstyle
+        run: mvn checkstyle:check
+
+      - name: Run Tests with Coverage
+        run: mvn test jacoco:report
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
+
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: target/surefire-reports
+
+
+
