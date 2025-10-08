@@ -2,6 +2,7 @@ package com.sr.inventory_tracker.config;
 
 import com.sr.inventory_tracker.service.CustomUserDetailsService;
 import com.sr.inventory_tracker.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -43,35 +45,43 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
+        try {
+            String username = jwtService.extractUsername(token);
 
-        log.info("Extracted JWT: {}", token);
-        log.info("Extracted username: {}", username);
+            log.info("Extracted JWT: {}", token);
+            log.info("Extracted username: {}", username);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        log.info("Current Authentication: {}", authentication);
+            log.info("Current Authentication: {}", authentication);
 
-        if (authentication == null && username != null) {
-            log.info("No valid authentication found. Attempting to authenticate the user.");
+            if (authentication == null && username != null) {
+                log.info("No valid authentication found. Attempting to authenticate the user.");
 
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
-            if (jwtService.isValidToken(token, userDetails)) {
+                if (jwtService.isValidToken(token, userDetails)) {
 
-                log.info("Validated JWT token");
+                    log.info("Validated JWT token");
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
 
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
-                log.info("Authentication token set in the security context for user: {}", username);
+                    log.info("Authentication token set in the security context for user: {}", username);
+
+                }
 
             }
-
+        } catch (ExpiredJwtException e) {
+            log.error("JWT Token has expired: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("An error occurred while processing the JWT token: {}", e.getMessage());
+            throw e;
         }
 
         filterChain.doFilter(request, response);

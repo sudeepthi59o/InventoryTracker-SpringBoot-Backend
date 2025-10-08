@@ -1,6 +1,7 @@
 package com.sr.inventory_tracker.error;
 
 import com.sr.inventory_tracker.model.ErrorMessage;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,6 +36,20 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(UsernameExistsException.class)
     public ResponseEntity<ErrorMessage> usernameExistsException(UsernameExistsException usernameExistsException) {
         ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST, usernameExistsException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorMessage> handleExpiredJwtException(ExpiredJwtException ex) {
+        ErrorMessage message = new ErrorMessage(HttpStatus.UNAUTHORIZED, "JWT Token has expired. Please login again.");
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(message);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorMessage> handleGenericException(Exception ex) {
+        ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST, "An error occurred with the JWT token");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 
