@@ -1,5 +1,9 @@
 package com.sr.inventory_tracker.service;
 
+import com.sr.inventory_tracker.DTO.CategoryDTO;
+import com.sr.inventory_tracker.DTO.ProductDTO;
+import com.sr.inventory_tracker.DTO.ProductFilterDTO;
+import com.sr.inventory_tracker.DTO.SupplierDTO;
 import com.sr.inventory_tracker.error.CategoryNotFoundException;
 import com.sr.inventory_tracker.error.ProductNotFoundException;
 import com.sr.inventory_tracker.error.SupplierNotFoundException;
@@ -8,10 +12,12 @@ import com.sr.inventory_tracker.repository.CategoryRepository;
 import com.sr.inventory_tracker.repository.ProductRepository;
 import com.sr.inventory_tracker.repository.SupplierRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -111,6 +117,76 @@ public class ProductServiceImpl implements ProductService {
             log.warn("No products found");
         }
 
+        return fromEntityListToDTOList(products);
+    }
+
+    @Override
+    public List<ProductDTO> getProductsByCategoryAndSupplier(ProductFilterDTO productFilterDTO) throws SupplierNotFoundException, CategoryNotFoundException {
+        log.info("Inside getProductsByCategoryAndSupplier - Fetching list of products based on category and supplier");
+
+        CategoryDTO categoryDTO = productFilterDTO.getCategoryDTO();
+        SupplierDTO supplierDTO = productFilterDTO.getSupplierDTO();
+
+        if ((categoryDTO == null || categoryDTO.getName() == null) && (supplierDTO == null || supplierDTO.getName() == null)) {
+            log.warn("Both category and supplier are missing, fetching all products.");
+            return getAllProducts();
+        }
+
+        if (categoryDTO == null || categoryDTO.getName() == null) {
+            return getProductsCategoryMissing(supplierDTO);
+        }
+
+        // Case 3: Supplier is missing, fetch products by category
+        if (supplierDTO == null || supplierDTO.getName() == null) {
+            return getProductsSupplierMissing(categoryDTO);
+        }
+
+        // Case 4: Both category and supplier are provided
+        Supplier supplier = supplierRepository.findByName(supplierDTO.getName());
+        Category category = categoryRepository.findByName(categoryDTO.getName());
+
+        if (category == null) {
+            log.warn("Category not found: {}", categoryDTO.getName());
+            return getProductsCategoryMissing(supplierDTO);
+        }
+
+        if (supplier == null) {
+            log.warn("Supplier not found: {}", supplierDTO.getName());
+            return getProductsSupplierMissing(categoryDTO);
+        }
+
+        List<Product> products = productRepository.findProductsByCategoryAndSupplier(supplier.getId(), category.getId());
+
+        if (products.isEmpty()) {
+            log.warn("No products found for category: {} and supplier: {}", category.getName(), supplier.getName());
+        }
+
+        return fromEntityListToDTOList(products);
+    }
+
+    public List<ProductDTO> getProductsSupplierMissing(CategoryDTO categoryDTO) {
+        log.warn("Supplier is missing, fetching all products of category.");
+
+        Category category = categoryRepository.findByName(categoryDTO.getName());
+        if (category == null) {
+            log.warn("Category not found: {}", categoryDTO.getName());
+            return fromEntityListToDTOList(productRepository.findAll());
+        }
+
+        List<Product> products = productRepository.findByCategoryId(category.getId());
+        return fromEntityListToDTOList(products);
+    }
+
+    public List<ProductDTO> getProductsCategoryMissing(SupplierDTO supplierDTO) {
+        log.warn("Category is missing, fetching all products of supplier.");
+
+        Supplier supplier = supplierRepository.findByName(supplierDTO.getName());
+        if (supplier == null) {
+            log.warn("Supplier not found: {}", supplierDTO.getName());
+            return fromEntityListToDTOList(productRepository.findAll());
+        }
+
+        List<Product> products = productRepository.findBySupplierId(supplier.getId());
         return fromEntityListToDTOList(products);
     }
 

@@ -1,8 +1,8 @@
 package com.sr.inventory_tracker.controller;
 
-import com.sr.inventory_tracker.model.CategoryDTO;
-import com.sr.inventory_tracker.model.ProductDTO;
-import com.sr.inventory_tracker.model.SupplierDTO;
+import com.sr.inventory_tracker.DTO.CategoryDTO;
+import com.sr.inventory_tracker.DTO.ProductDTO;
+import com.sr.inventory_tracker.DTO.SupplierDTO;
 import com.sr.inventory_tracker.repository.ProductRepository;
 import com.sr.inventory_tracker.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;

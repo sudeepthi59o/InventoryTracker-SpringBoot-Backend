@@ -1,21 +1,19 @@
 package com.sr.inventory_tracker.controller;
 
 import com.sr.inventory_tracker.error.SupplierNotFoundException;
-import com.sr.inventory_tracker.model.SupplierDTO;
+import com.sr.inventory_tracker.DTO.SupplierDTO;
 import com.sr.inventory_tracker.service.SupplierService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/supplier")
+@CrossOrigin(origins = "http://localhost:5173")
 @Slf4j
 public class SupplierController {
 

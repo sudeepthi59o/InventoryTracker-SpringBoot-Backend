@@ -1,10 +1,13 @@
 package com.sr.inventory_tracker.controller;
 
 
+import com.sr.inventory_tracker.DTO.CategoryDTO;
+import com.sr.inventory_tracker.DTO.SupplierDTO;
 import com.sr.inventory_tracker.error.CategoryNotFoundException;
 import com.sr.inventory_tracker.error.ProductNotFoundException;
 import com.sr.inventory_tracker.error.SupplierNotFoundException;
-import com.sr.inventory_tracker.model.ProductDTO;
+import com.sr.inventory_tracker.DTO.ProductDTO;
+import com.sr.inventory_tracker.DTO.ProductFilterDTO;
 import com.sr.inventory_tracker.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
+@CrossOrigin(origins = "http://localhost:5173")
 @Slf4j
 public class ProductController {
 
@@ -84,4 +88,28 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @Operation(
+            summary = "Filter products by category and supplier", description = "Fetch a list of products filtered by category and/or supplier. Both category and supplier are optional parameters. If both are missing, all products will be returned."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved products"),
+    })
+    @GetMapping("/filter")
+    public List<ProductDTO> getProductsByCategoryAndSupplier(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String supplier) throws SupplierNotFoundException, CategoryNotFoundException {
+
+        ProductFilterDTO productFilterDTO = new ProductFilterDTO();
+
+        if (category != null) {
+            productFilterDTO.setCategoryDTO(CategoryDTO.builder().name(category).build());
+        }
+
+        if (supplier != null) {
+            productFilterDTO.setSupplierDTO(SupplierDTO.builder().name(supplier).build());
+        }
+
+        return productService.getProductsByCategoryAndSupplier(productFilterDTO);
+    }
 }
+

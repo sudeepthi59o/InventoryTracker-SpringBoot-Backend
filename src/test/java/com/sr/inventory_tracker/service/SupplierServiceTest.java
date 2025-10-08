@@ -2,7 +2,7 @@ package com.sr.inventory_tracker.service;
 
 import com.sr.inventory_tracker.error.SupplierNotFoundException;
 import com.sr.inventory_tracker.model.Supplier;
-import com.sr.inventory_tracker.model.SupplierDTO;
+import com.sr.inventory_tracker.DTO.SupplierDTO;
 import com.sr.inventory_tracker.repository.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

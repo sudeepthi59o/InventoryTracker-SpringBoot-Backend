@@ -1,5 +1,8 @@
 package com.sr.inventory_tracker.service;
 
+import com.sr.inventory_tracker.DTO.CategoryDTO;
+import com.sr.inventory_tracker.DTO.ProductDTO;
+import com.sr.inventory_tracker.DTO.SupplierDTO;
 import com.sr.inventory_tracker.error.CategoryNotFoundException;
 import com.sr.inventory_tracker.error.ProductNotFoundException;
 import com.sr.inventory_tracker.error.SupplierNotFoundException;

@@ -1,9 +1,9 @@
 package com.sr.inventory_tracker.service;
 
 import com.sr.inventory_tracker.error.UsernameExistsException;
-import com.sr.inventory_tracker.model.TokenDTO;
+import com.sr.inventory_tracker.DTO.TokenDTO;
 import com.sr.inventory_tracker.model.User;
-import com.sr.inventory_tracker.model.UserDTO;
+import com.sr.inventory_tracker.DTO.UserDTO;
 import com.sr.inventory_tracker.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

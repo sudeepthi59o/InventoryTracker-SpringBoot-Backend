@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "suppliers")
+@Table(name = "suppliers", uniqueConstraints = @UniqueConstraint(name = "unique_supplier_name", columnNames = "name"))
 public class Supplier {
 
     @Id

@@ -1,20 +1,18 @@
 package com.sr.inventory_tracker.controller;
 
 import com.sr.inventory_tracker.error.UsernameExistsException;
-import com.sr.inventory_tracker.model.TokenDTO;
-import com.sr.inventory_tracker.model.UserDTO;
+import com.sr.inventory_tracker.DTO.TokenDTO;
+import com.sr.inventory_tracker.DTO.UserDTO;
 import com.sr.inventory_tracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:5173")
 @Slf4j
 public class LoginController {
 

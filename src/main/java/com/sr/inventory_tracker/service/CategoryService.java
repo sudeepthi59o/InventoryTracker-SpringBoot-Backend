@@ -1,7 +1,7 @@
 package com.sr.inventory_tracker.service;
 
 import com.sr.inventory_tracker.error.CategoryNotFoundException;
-import com.sr.inventory_tracker.model.CategoryDTO;
+import com.sr.inventory_tracker.DTO.CategoryDTO;
 
 import java.util.List;
 

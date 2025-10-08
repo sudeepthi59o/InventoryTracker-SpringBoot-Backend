@@ -1,4 +1,4 @@
-package com.sr.inventory_tracker.model;
+package com.sr.inventory_tracker.DTO;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

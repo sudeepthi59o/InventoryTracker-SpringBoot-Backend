@@ -1,4 +1,4 @@
-package com.sr.inventory_tracker.model;
+package com.sr.inventory_tracker.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

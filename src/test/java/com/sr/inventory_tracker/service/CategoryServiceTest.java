@@ -2,7 +2,7 @@ package com.sr.inventory_tracker.service;
 
 import com.sr.inventory_tracker.error.CategoryNotFoundException;
 import com.sr.inventory_tracker.model.Category;
-import com.sr.inventory_tracker.model.CategoryDTO;
+import com.sr.inventory_tracker.DTO.CategoryDTO;
 import com.sr.inventory_tracker.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
