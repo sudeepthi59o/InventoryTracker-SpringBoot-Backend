@@ -7,17 +7,17 @@ import com.sr.inventory_tracker.DTO.SupplierDTO;
 import com.sr.inventory_tracker.error.CategoryNotFoundException;
 import com.sr.inventory_tracker.error.ProductNotFoundException;
 import com.sr.inventory_tracker.error.SupplierNotFoundException;
-import com.sr.inventory_tracker.model.*;
+import com.sr.inventory_tracker.model.Category;
+import com.sr.inventory_tracker.model.Product;
+import com.sr.inventory_tracker.model.Supplier;
 import com.sr.inventory_tracker.repository.CategoryRepository;
 import com.sr.inventory_tracker.repository.ProductRepository;
 import com.sr.inventory_tracker.repository.SupplierRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
