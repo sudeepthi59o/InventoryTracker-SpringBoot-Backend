@@ -33,8 +33,19 @@ jobs:
           script: |
             # Stop the existing application
             sudo systemctl stop inventory-tracker.service || true
- 
-            scp target/inventory-tracker-1.0.jar /home/ec2-user/inventory-tracker.jar
-            
+
+      - name: Copy jar file to EC2
+        run: |
+          scp -i ${{ secrets.SSH_PRIVATE_KEY }} target/inventory-tracker-1.0.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/inventory-tracker.jar
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Restart the application on EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
             # Restart the application service
             sudo systemctl start inventory-tracker.service
