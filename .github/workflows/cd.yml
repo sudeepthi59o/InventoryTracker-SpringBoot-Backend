@@ -31,25 +31,12 @@ jobs:
           username: ec2-user
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Check if Java is installed
-            if ! command -v java &> /dev/null
-            then
-              echo "Java not found, installing JDK 17..."
-              sudo yum update -y
-              sudo yum install java-17-amazon-corretto -y
-            else
-              echo "Java is already installed."
-            fi
-  
-            # Stop the Spring Boot service if it's running
-            sudo systemctl stop inventory-tracker || true
-  
-            # Remove the old jar file
-            rm -f /home/ec2-user/inventory-tracker.jar
-  
-            # Copy the new jar to the correct location
-            echo "Moving new jar file to /home/ec2-user/inventory-tracker.jar"
-            mv target/*.jar /home/ec2-user/inventory-tracker.jar          
+            # Stop the existing application
+            sudo systemctl stop inventory-tracker.service || true
             
-            # Restart the Spring Boot service using systemd
-            sudo systemctl start inventory-tracker
+            # Transfer the JAR file or pull the Docker image
+            # If deploying JAR directly:
+            scp target/*.jar /home/ec2-user/inventory-tracker.jar
+            
+            # Restart the application service
+            sudo systemctl start inventory-tracker.service
