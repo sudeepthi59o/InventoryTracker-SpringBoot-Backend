@@ -8,7 +8,7 @@ This is the **backend** part of the **Inventory Tracker** application, built wit
 ### Features:
 - Provides RESTful API endpoints for managing inventory.
 - Connects to a PostgreSQL database for persistent data storage.
-- Uses JWT for authentication and authorization (if applicable).
+- Uses JWT for authentication and authorization.
 
 ## Technologies Used:
 - **Spring Boot**: Framework for building Java-based backend applications.
