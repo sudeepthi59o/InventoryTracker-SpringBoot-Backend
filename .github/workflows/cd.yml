@@ -1,4 +1,4 @@
-name: Continuous Integration Workflow for Inventory Tracker
+name: Continuous Deployment Workflow for Inventory Tracker
 
 on:
   workflow_dispatch:
@@ -49,3 +49,5 @@ jobs:
             
             # Restart the Spring Boot service using systemd
             sudo systemctl start inventory-tracker
+            
+            5fb8ef9
