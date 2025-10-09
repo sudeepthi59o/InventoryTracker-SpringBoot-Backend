@@ -49,7 +49,7 @@ jobs:
   
             # Copy the new jar to the correct location
             echo "Moving new jar file to /home/ec2-user/inventory-tracker.jar"
-            mv /home/runner/work/InventoryTracker-SpringBoot-Backend/InventoryTracker-SpringBoot-Backend/target/*.jar /home/ec2-user/inventory-tracker.jar          
+            mv target/*.jar /home/ec2-user/inventory-tracker.jar          
             
             # Restart the Spring Boot service using systemd
             sudo systemctl start inventory-tracker
