@@ -24,6 +24,14 @@ jobs:
       - name: List files in target directory
         run: ls -al target/
 
+      - name: Debug - Print working directory and files
+        run: |
+          pwd
+          ls -al
+
+      - name: Set file permissions for jar (optional)
+        run: chmod 644 target/inventory-tracker-1.0.jar
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.0
         with:
