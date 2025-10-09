@@ -33,7 +33,7 @@ public class JwtService {
                 .subject(user.getUserName())
                 .issuer("Inventory Tracker Application")
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                .expiration(new Date(System.currentTimeMillis() + 20 * 60 * 1000))
                 .and()
                 .signWith(generateKey())
                 .compact();

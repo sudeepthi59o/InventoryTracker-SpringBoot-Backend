@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AttributeOverrides({
-        @AttributeOverride(name = "address_line1", column = @Column(name = "addressLine1")),
-        @AttributeOverride(name = "address_line2", column = @Column(name = "addressLine2")),
+        @AttributeOverride(name = "addressLine1", column = @Column(name = "address_line1")),
+        @AttributeOverride(name = "addressLine2", column = @Column(name = "address_line2")),
         @AttributeOverride(name = "city", column = @Column(name = "city")),
         @AttributeOverride(name = "state", column = @Column(name = "state")),
         @AttributeOverride(name = "zipcode", column = @Column(name = "zipcode"))

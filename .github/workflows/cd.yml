@@ -1,19 +1,51 @@
-name: Continuous Deployment
+name: Continuous Integration Workflow for Inventory Tracker
 
 on:
-  workflow_run:
-    workflows: ["Continuous Integration Workflow for Inventory Tracker"]
-    types:
-      - completed
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v4
+
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
         with:
-          name: inventory-tracker-jar
-          path: ./app
+          distribution: zulu
+          java-version: 17
+
+      - name: Build and Package the Spring Boot Application
+        run: mvn clean package -DskipTests
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Check if Java is installed
+            if ! command -v java &> /dev/null
+            then
+              echo "Java not found, installing JDK 17..."
+              sudo yum update -y
+              sudo yum install java-17-amazon-corretto -y
+            else
+              echo "Java is already installed."
+            fi
+  
+            # Stop the Spring Boot service if it's running
+            sudo systemctl stop inventory-tracker || true
+  
+            # Remove the old jar file
+            rm -f /home/ec2-user/inventory-tracker.jar
+  
+            # Copy the new jar to the correct location
+            mv target/*.jar /home/ec2-user/inventory-tracker.jar            
+            
+            # Restart the Spring Boot service using systemd
+            sudo systemctl start inventory-tracker

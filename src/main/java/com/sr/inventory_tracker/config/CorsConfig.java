@@ -15,7 +15,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Primary
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.addAllowedOrigin("http://localhost:5173"); // Frontend origin
+        corsConfig.addAllowedOrigin("http://inventory-tracker-frontend-react.s3-website-us-east-1.amazonaws.com"); // Frontend origin
         corsConfig.addAllowedMethod("*"); // Allow all HTTP methods
         corsConfig.addAllowedHeader("Authorization"); // Allow specific headers
         corsConfig.addAllowedHeader("Content-Type");
