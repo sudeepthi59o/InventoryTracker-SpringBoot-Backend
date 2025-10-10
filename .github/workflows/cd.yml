@@ -70,7 +70,7 @@ jobs:
       # Copy the built jar file to the EC2 instance
       - name: Copy jar file to EC2
         run: |
-          scp -i ${{ secrets.SSH_PRIVATE_KEY }} target/inventory-tracker-1.0.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/inventory-tracker-1.0.jar.jar
+          scp -i ${{ secrets.SSH_PRIVATE_KEY }} target/inventory-tracker-1.0.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/inventory-tracker-1.0.jar
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
