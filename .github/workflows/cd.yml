@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       # Checkout the code from the repository
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -46,31 +45,28 @@ jobs:
       - name: List files in target directory
         run: ls -al target/
 
-      # Debug - Print working directory and files (optional)
-      - name: Debug - Print working directory and files
-        run: |
-          pwd
-          ls -al
-
-      # Set file permissions for the jar file (optional)
-      - name: Set file permissions for jar
-        run: chmod 644 target/inventory-tracker-1.0.jar
-
-      # Deploy to EC2 (Stop the existing service)
-      - name: Deploy to EC2 - Stop existing application
-        uses: appleboy/ssh-action@v1.0.0
+      # Upload the .jar file as an artifact to be used in the deploy job
+      - name: Upload .jar file as an artifact
+        uses: actions/upload-artifact@v3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Stop the existing Spring Boot application if running
-            sudo systemctl stop inventory-tracker.service || true
+          name: inventory-tracker-jar   # Artifact name
+          path: target/inventory-tracker-1.0.jar  # Path to the .jar file
 
-      # Copy the built jar file to the EC2 instance
-      - name: Copy jar file to EC2
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # Make sure the build job completes before deploying
+
+    steps:
+      # Download the artifact uploaded in the build job
+      - name: Download .jar artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: inventory-tracker-jar  # Match the artifact name used in the build job
+
+      # Copy the .jar file to the EC2 instance
+      - name: Copy .jar file to EC2
         run: |
-          scp -i ${{ secrets.SSH_PRIVATE_KEY }} target/inventory-tracker-1.0.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/inventory-tracker-1.0.jar
+          scp -i ${{ secrets.SSH_PRIVATE_KEY }} inventory-tracker-jar/inventory-tracker-1.0.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/inventory-tracker-1.0.jar
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
@@ -82,6 +78,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # Stop the existing Spring Boot application if running
+            sudo systemctl stop inventory-tracker.service || true
             # Start the Spring Boot application service
             sudo systemctl start inventory-tracker.service
-
