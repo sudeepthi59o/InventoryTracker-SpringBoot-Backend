@@ -47,7 +47,7 @@ jobs:
 
       # Upload the .jar file as an artifact to be used in the deploy job
       - name: Upload .jar file as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: inventory-tracker-jar   # Artifact name
           path: target/inventory-tracker-1.0.jar  # Path to the .jar file
@@ -59,7 +59,7 @@ jobs:
     steps:
       # Download the artifact uploaded in the build job
       - name: Download .jar artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
           name: inventory-tracker-jar  # Match the artifact name used in the build job
 
