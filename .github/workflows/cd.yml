@@ -80,10 +80,14 @@ jobs:
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Verify private key file
+        run: ls -l private_key.pem
+
+
       # Copy the .jar file to the EC2 instance
       - name: Copy .jar file to EC2
         run: |
-          scp -v -i ${{ secrets.SSH_PRIVATE_KEY }} inventory-tracker-1.0.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/inventory-tracker-1.0.jar
+          scp -v -i private_key.pem inventory-tracker-1.0.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/inventory-tracker-1.0.jar
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
